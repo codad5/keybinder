@@ -2,12 +2,14 @@ export class KeyBinder {
     constructor(settings) {
         this.settings = {
             default_listner: 'keypress',
-            element: window
+            element: window,
+            case_sensitive: false
         };
-        this.meta_keys = ['Control', 'Shift', 'Alt'];
-        this.timer_lsitner = this.setTimeout();
+        this.meta_keys = ['Control', 'Shift', 'Alt', 'Meta'].map(v => v.toLowerCase());
+        this.can_shift = 'abcdefghijklmnopqrstuvwxyz1234567890';
+        this.last_combination = '';
         this.just_listened = false;
-        this.timer = 150;
+        this.timer = 200;
         this.current_stroke = [];
         this.listen_to = [];
         this.settings = Object.assign(Object.assign({}, this.settings), settings);
@@ -17,7 +19,10 @@ export class KeyBinder {
         if (!element)
             throw new Error('No element provided');
         element === null || element === void 0 ? void 0 : element.addEventListener(listner, (e) => {
-            let key = e.key;
+            // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
+            let can_shift = this.can_shift + this.can_shift.toUpperCase();
+            let key = e === null || e === void 0 ? void 0 : e.key;
+            // console.log(key)
             e.preventDefault();
             clearTimeout(this.timer_lsitner);
             if (!this.just_listened) {
@@ -26,18 +31,24 @@ export class KeyBinder {
             }
             (e === null || e === void 0 ? void 0 : e.ctrlKey) && this.current_stroke.indexOf('ctrl') < 0 ? this.current_stroke.push('ctrl') : null;
             (e === null || e === void 0 ? void 0 : e.altKey) && this.current_stroke.indexOf('alt') < 0 ? this.current_stroke.push('alt') : null;
-            (e === null || e === void 0 ? void 0 : e.shiftKey) && this.current_stroke.indexOf('shift') < 0 ? this.current_stroke.push('shift') : null;
+            (e === null || e === void 0 ? void 0 : e.metaKey) && this.current_stroke.indexOf('meta') < 0 ? this.current_stroke.push('meta') : null;
+            (e === null || e === void 0 ? void 0 : e.shiftKey) && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e === null || e === void 0 ? void 0 : e.key}`) >= 0 && `${e === null || e === void 0 ? void 0 : e.key}`.length == 1 ? this.current_stroke.push('shift') : null;
             if (listner == 'keypress')
-                key = (e === null || e === void 0 ? void 0 : e.key.length) > 1 ? e === null || e === void 0 ? void 0 : e.code[(e === null || e === void 0 ? void 0 : e.code.length) - 1] : e === null || e === void 0 ? void 0 : e.key;
-            if (listner != 'keypress' && this.meta_keys[e === null || e === void 0 ? void 0 : e.key])
+                key = `${e === null || e === void 0 ? void 0 : e.key}`.length > 1 ? e === null || e === void 0 ? void 0 : e.code[(e === null || e === void 0 ? void 0 : e.code.length) - 1] : e === null || e === void 0 ? void 0 : e.key;
+            if (listner != 'keypress' && this.meta_keys.indexOf('key') >= 0)
                 key = null;
+            // console.log(key)
+            if (`${key}`.length > 1)
+                key = `${key}`.toLowerCase();
+            // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
             if ((e === null || e === void 0 ? void 0 : e.key.trim().length) == 0)
                 key = 'space';
             // console.log(key)
             key ? this.current_stroke.push(key) : null;
+            this.last_combination = this.current_stroke.join('+');
             this.timer_lsitner = this.setTimeout(this.timer - 10);
             this.just_listened = true;
-            // console.log(this.current_stroke, e?.key.trim().length)
+            console.log(this.current_stroke, can_shift.indexOf(e === null || e === void 0 ? void 0 : e.key));
         });
     }
     setTimeout(time = this.timer) {
@@ -50,28 +61,32 @@ export class KeyBinder {
     startListening() {
         this.main_listner = this.listner(this.settings.default_listner, this.settings.element);
     }
-    ListenToKey(key, ...data) {
-        const callback = data.pop();
-        // console.log(data)
-        delete data[data.length - 1];
+    /**
+     * This is the function that assemble all the key combination to be listened to by the
+     * @param key the comination set to be called , they are seperared with the `+` sign
+     * @callback callback this is the function is to be called after
+     */
+    ListenToKey(key, callback) {
+        if (key.split('+').length == 1 && key.split('+')[0].length > 1)
+            key = key.toLowerCase();
         this.listen_to.push({
             combination: key.trim(),
-            callback: (data) => callback[0](data)
+            callback: (data = null) => callback[0](data)
         });
-        data.map(value => {
-            this.listen_to.push({
-                combination: value.trim(),
-                callback: (data) => callback[0](data)
-            });
-        });
+        return this;
     }
     handleKey() {
-        let key_combination = this.current_stroke.join('+').toLowerCase();
+        let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase();
         let combination_data = this.listen_to.filter((data) => {
-            return data.combination.toLowerCase() === key_combination;
-        })[0];
-        const settings = this.settings.default_listner;
-        combination_data === null || combination_data === void 0 ? void 0 : combination_data.callback(Object.assign(Object.assign({}, combination_data), { settings }));
+            const key = this.settings.case_sensitive ? data.combination : data.combination.toLowerCase();
+            return key === key_combination || key === "***";
+        })[0], settings = Object.assign(Object.assign({}, combination_data), this.settings);
+        if (combination_data.combination === '***') {
+            settings = Object.assign(Object.assign({}, settings), { combination: this.last_combination });
+        }
+        console.log(combination_data);
+        if (combination_data)
+            combination_data === null || combination_data === void 0 ? void 0 : combination_data.callback(Object.assign({}, settings));
     }
 }
 /**

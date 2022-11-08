@@ -1,6 +1,7 @@
 export  type Keybinder_setting = {
     default_listner : key_listner,
-    element ?: Element|Window 
+    element ?: Element|Window ,
+    case_sensitive ?: boolean
 }
 
 export type KeyCombination = {

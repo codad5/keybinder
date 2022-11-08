@@ -3,13 +3,18 @@ export class KeyBinder {
     
     readonly settings: Keybinder_setting = {
         default_listner: 'keypress',
-        element: window
+        element: window,
+        case_sensitive:false
     }
-    private readonly meta_keys = ['Control', 'Shift', 'Alt']
+    private readonly meta_keys = ['Control', 'Shift', 'Alt', 'Meta'].map(v => v.toLowerCase());
+    private readonly can_shift = 'abcdefghijklmnopqrstuvwxyz1234567890'
     private listner(listner: key_listner = 'keypress', element: Element|Window|undefined|null){
         if(!element) throw new Error('No element provided')
         element?.addEventListener(listner, (e) => {
-            let key = e.key
+            // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
+            let can_shift = this.can_shift+this.can_shift.toUpperCase()
+            let key = e?.key
+            // console.log(key)
             e.preventDefault()
             clearTimeout(this.timer_lsitner)
             if(!this.just_listened){
@@ -18,21 +23,27 @@ export class KeyBinder {
             }
             e?.ctrlKey && this.current_stroke.indexOf('ctrl') < 0 ? this.current_stroke.push('ctrl') : null
             e?.altKey && this.current_stroke.indexOf('alt') < 0  ? this.current_stroke.push('alt') : null
-            e?.shiftKey && this.current_stroke.indexOf('shift') < 0  ? this.current_stroke.push('shift') : null
-            if(listner == 'keypress')  key = e?.key.length > 1 ? e?.code[e?.code.length - 1] : e?.key
-            if(listner != 'keypress' && this.meta_keys[e?.key])key = null
+            e?.metaKey && this.current_stroke.indexOf('meta') < 0  ? this.current_stroke.push('meta') : null
+            e?.shiftKey && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e?.key}`) >= 0 && `${e?.key}`.length == 1 ? this.current_stroke.push('shift') : null
+            if(listner == 'keypress')  key = `${e?.key}`.length > 1 ? e?.code[e?.code.length - 1] : e?.key
+            if(listner != 'keypress' && this.meta_keys.indexOf('key') >= 0)key = null
+            // console.log(key)
+            if(`${key}`.length > 1) key = `${key}`.toLowerCase()
+            // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
             if(e?.key.trim().length == 0) key = 'space'
             // console.log(key)
             key ? this.current_stroke.push(key) : null
+            this.last_combination = this.current_stroke.join('+')
             this.timer_lsitner = this.setTimeout(this.timer - 10)
             this.just_listened = true
-            // console.log(this.current_stroke, e?.key.trim().length)
+            console.log(this.current_stroke, can_shift.indexOf(e?.key))
         })
     }
-    timer_lsitner = this.setTimeout()
+    last_combination :string = ''
+    timer_lsitner ?: NodeJS.Timeout
     just_listened = false
     main_listner: any
-    timer = 150
+    timer = 200
     current_stroke: String[] = []
     private listen_to : KeyCombination[] = []
     constructor(settings ?: Keybinder_setting){
@@ -49,28 +60,31 @@ export class KeyBinder {
     startListening(){
         this.main_listner = this.listner(this.settings.default_listner, this.settings.element)
     }
-    ListenToKey(key: string, ...data: any[]){
-        const callback = data.pop()
-        // console.log(data)
-        delete data[data.length -1]
+    /**
+     * This is the function that assemble all the key combination to be listened to by the
+     * @param key the comination set to be called , they are seperared with the `+` sign
+     * @callback callback this is the function is to be called after
+     */
+    ListenToKey(key: string, callback: ((arg0: any) => any)[]): this{
+        if(key.split('+').length == 1 && key.split('+')[0].length > 1)key = key.toLowerCase()
         this.listen_to.push({
             combination:key.trim(),
-            callback: (data) => callback[0](data)
+            callback: (data = null) => callback[0](data)
         })
-        data.map(value => {
-            this.listen_to.push({
-                combination:value.trim(),
-                callback: (data) => callback[0](data)
-            })
-        })
+        return this
     }
     handleKey(){
-        let key_combination = this.current_stroke.join('+').toLowerCase()
+        let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase()
         let combination_data = this.listen_to.filter((data) => {
-            return data.combination.toLowerCase() === key_combination
-        })[0]
-        const settings = this.settings.default_listner
-        combination_data?.callback({...combination_data, settings})
+            const key = this.settings.case_sensitive ? data.combination: data.combination.toLowerCase()
+            return key === key_combination || key === "***"
+        })[0],
+        settings = {...combination_data, ...this.settings}
+        if(combination_data.combination === '***'){
+            settings = {...settings, combination:this.last_combination}
+        } 
+        console.log(combination_data)
+        if(combination_data) combination_data?.callback({...settings})
     }
 
 

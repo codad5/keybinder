@@ -2,32 +2,53 @@
 <div id="bcdiv"><strong>Press B+G: </strong></div>
 <div id="scdiv"><strong>Press Shift+C: </strong></div>
 <div id="spacediv"><strong>Press the SpaceBar: </strong></div>
+<p>
+    <h2>Your current key combination</h2>
+    <ol id="keystrokehistory">
+
+    </ol>
+</p>
 <script type="module">
     import { KeyBinder as KeyBinder } from './out/index.js'
     const keyController = new KeyBinder({
-    default_listner: 'keypress',
-    element: window
+    default_listner: 'keyup',
+    element: window,
+    // case_sensitive:true
     })
 
     const ListenToKey = (key, ...data) => keyController.ListenToKey(key, data)
     
     ListenToKey('B+G', () => {
-        console.log('hello world', 'paul')
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         document.querySelector('#bcdiv').innerHTML += 'Your Called me ?'
     })
-    ListenToKey('shift+c+c', () => {
-        console.log('hello world', 'chi')
+    ListenToKey('shift+c', () => {
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
     })
-    ListenToKey('c+q', (data) => {
-        console.log('hello world', data)
+    ListenToKey('enter', (data) => {
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        console.table({...data, element: 'Window'})
+        confirm('Do you need more information?')
     })
     ListenToKey('space', (data) => {
-        // console.log('hello world', data)
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         document.querySelector('#spacediv').innerHTML += 'la'
     })
-    ListenToKey('alt+c+q+q', (data) => {
-        // console.log('hello world', data)
+    ListenToKey('shift+s', (data) => {
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+    })
+    ListenToKey('meta', (data) => {
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        if(alert('Dont press the windows key again')) return
+    })
+    ListenToKey('ctrl+b', (data) => {
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        confirm('bold combination')
+    })
+    ListenToKey('***', (data) => {
+        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        document.querySelector('#keystrokehistory').innerHTML += `<li>Your  combination is ${data.combination} </li>`
     })
 </script>
 
