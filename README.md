@@ -36,7 +36,7 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
 ```js
 mport { KeyBinder as KeyBinder } from 'keyBinder'
 const keyController = new KeyBinder({
-    default_listner: 'keyup',
+    default_listner: 'keyup', // can be keydown, keypress
     element: window,
     // case_sensitive:true // this is if you want to make the listner case sensitive
 })
@@ -59,14 +59,20 @@ ListenToKey('shift+c', () => {
     console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
     document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
 })
+
 ```
 > OR this
 ```js
 keyController.ListenToKey('enter', (data) => {
-        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
-        console.table({...data, element: 'Window'})
-        confirm('Do you need more information?')
-    })
+    console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+    console.table({...data, element: 'Window'})
+    confirm('Do you need more information?')
+})
+
+keyController.ListenToKey('ctrl+space', () => {
+console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
+})
 ```
 
 Check Our Test Website to see the avaliable key commands for
@@ -83,6 +89,8 @@ Check Our Test Website to see the avaliable key commands for
 | > | arrowup |
 1 | !
 1...9 | 1...9
+f1...f9 | f1...f9
+Windows - Home Buttom | meta
 | Listen to any other key | ***
 
 ## Todos
