@@ -8,6 +8,33 @@ export class KeyBinder {
     }
     private readonly meta_keys = ['Control', 'Shift', 'Alt', 'Meta'].map(v => v.toLowerCase());
     private readonly can_shift = 'abcdefghijklmnopqrstuvwxyz1234567890'
+    last_combination :string = ''
+    timer_lsitner ?: NodeJS.Timeout
+    just_listened = false
+    main_listner: any
+    timer = 200
+    current_stroke: String[] = []
+    private listen_to : KeyCombination[] = []
+    constructor(settings ?: Keybinder_setting){
+        this.settings = {...this.settings, ...settings}
+        this.startListening()
+    }
+    /**
+     * This set and check for the key combination done under the time set
+     * @param time the time to wait for the key combination to be done
+     */
+    setTimeout(time = this.timer){
+        time = time < 95 ? this.timer : time
+        return setTimeout(() => { 
+            this.just_listened = false
+            this.handleKey()
+        }, time)
+    }
+    /**
+     * 
+     * @param listner This is type of event to be listened to.
+     * @param element The element you want to be listened to
+     */
     private listner(listner: key_listner = 'keypress', element: Element|Window|undefined|null){
         if(!element) throw new Error('No element provided')
         element?.addEventListener(listner, (e) => {
@@ -39,25 +66,11 @@ export class KeyBinder {
             console.log(this.current_stroke, can_shift.indexOf(e?.key))
         })
     }
-    last_combination :string = ''
-    timer_lsitner ?: NodeJS.Timeout
-    just_listened = false
-    main_listner: any
-    timer = 200
-    current_stroke: String[] = []
-    private listen_to : KeyCombination[] = []
-    constructor(settings ?: Keybinder_setting){
-        this.settings = {...this.settings, ...settings}
-        this.startListening()
-    }
-    setTimeout(time = this.timer){
-        time = time < 95 ? this.timer : time
-        return setTimeout(() => { 
-            this.just_listened = false
-            this.handleKey()
-        }, time)
-    }
-    startListening(){
+    /**
+     * This is the function that starts listening to the key combination
+     * 
+     */
+    private startListening(){
         this.main_listner = this.listner(this.settings.default_listner, this.settings.element)
     }
     /**
@@ -73,6 +86,9 @@ export class KeyBinder {
         })
         return this
     }
+    /**
+     * This is the functioned called after the combination is made
+     */
     handleKey(){
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase()
         let combination_data = this.listen_to.filter((data) => {
@@ -90,6 +106,8 @@ export class KeyBinder {
 
 
 }
+
+// How it works
 
 /**
  * How This will work 

@@ -15,6 +15,22 @@ export class KeyBinder {
         this.settings = Object.assign(Object.assign({}, this.settings), settings);
         this.startListening();
     }
+    /**
+     * This set and check for the key combination done under the time set
+     * @param time the time to wait for the key combination to be done
+     */
+    setTimeout(time = this.timer) {
+        time = time < 95 ? this.timer : time;
+        return setTimeout(() => {
+            this.just_listened = false;
+            this.handleKey();
+        }, time);
+    }
+    /**
+     *
+     * @param listner This is type of event to be listened to.
+     * @param element The element you want to be listened to
+     */
     listner(listner = 'keypress', element) {
         if (!element)
             throw new Error('No element provided');
@@ -51,13 +67,10 @@ export class KeyBinder {
             console.log(this.current_stroke, can_shift.indexOf(e === null || e === void 0 ? void 0 : e.key));
         });
     }
-    setTimeout(time = this.timer) {
-        time = time < 95 ? this.timer : time;
-        return setTimeout(() => {
-            this.just_listened = false;
-            this.handleKey();
-        }, time);
-    }
+    /**
+     * This is the function that starts listening to the key combination
+     *
+     */
     startListening() {
         this.main_listner = this.listner(this.settings.default_listner, this.settings.element);
     }
@@ -75,6 +88,9 @@ export class KeyBinder {
         });
         return this;
     }
+    /**
+     * This is the functioned called after the combination is made
+     */
     handleKey() {
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase();
         let combination_data = this.listen_to.filter((data) => {
@@ -89,6 +105,7 @@ export class KeyBinder {
             combination_data === null || combination_data === void 0 ? void 0 : combination_data.callback(Object.assign({}, settings));
     }
 }
+// How it works
 /**
  * How This will work
  * There will be an array that has all the list of  keybind to activate like ['crtl+b+c', 'alt+z']

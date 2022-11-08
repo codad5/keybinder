@@ -37,7 +37,7 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
 mport { KeyBinder as KeyBinder } from 'keyBinder'
 const keyController = new KeyBinder({
     default_listner: 'keyup', // can be keydown, keypress
-    element: window,
+    element: window, // can be any element or window eg `docmuent.querySelector('.myeditor')
     // case_sensitive:true // this is if you want to make the listner case sensitive
 })
 ```
