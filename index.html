@@ -1,0 +1,33 @@
+<h1>Key Binder</h1>
+<div id="bcdiv"><strong>Press B+G: </strong></div>
+<div id="scdiv"><strong>Press Shift+C: </strong></div>
+<div id="spacediv"><strong>Press the SpaceBar: </strong></div>
+<script type="module">
+    import { KeyBinder as KeyBinder } from './out/index.js'
+    const keyController = new KeyBinder({
+    default_listner: 'keypress',
+    element: window
+    })
+
+    const ListenToKey = (key, ...data) => keyController.ListenToKey(key, data)
+    
+    ListenToKey('B+G', () => {
+        console.log('hello world', 'paul')
+        document.querySelector('#bcdiv').innerHTML += 'Your Called me ?'
+    })
+    ListenToKey('shift+c+c', () => {
+        console.log('hello world', 'chi')
+        document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
+    })
+    ListenToKey('c+q', (data) => {
+        console.log('hello world', data)
+    })
+    ListenToKey('space', (data) => {
+        // console.log('hello world', data)
+        document.querySelector('#spacediv').innerHTML += 'la'
+    })
+    ListenToKey('alt+c+q+q', (data) => {
+        // console.log('hello world', data)
+    })
+</script>
+

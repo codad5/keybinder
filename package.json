@@ -1,0 +1,14 @@
+{
+  "name": "keybinder",
+  "version": "1.0.0",
+  "description": "This helps to manage key biniding command ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:ts": "tsc -p ./ --outDir ./out -w --pretty",
+    "build:ts": "tsc -b ./  -w --pretty"
+  },
+  "author": "Codad5,ptbysr",
+  "license": "ISC"
+}
