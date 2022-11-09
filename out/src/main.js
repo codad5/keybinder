@@ -64,7 +64,7 @@ export class KeyBinder {
             this.last_combination = this.current_stroke.join('+');
             this.timer_lsitner = this.setTimeout(this.timer - 10);
             this.just_listened = true;
-            console.log(this.current_stroke, can_shift.indexOf(e === null || e === void 0 ? void 0 : e.key));
+            // console.log(this.current_stroke, can_shift.indexOf(e?.key))
         });
     }
     /**
@@ -79,12 +79,16 @@ export class KeyBinder {
      * @param key the comination set to be called , they are seperared with the `+` sign
      * @callback callback this is the function is to be called after
      */
-    ListenToKey(key, callback) {
-        if (key.split('+').length == 1 && key.split('+')[0].length > 1)
-            key = key.toLowerCase();
-        this.listen_to.push({
-            combination: key.trim(),
-            callback: (data = null) => callback[0](data)
+    ListenToKey(key, ...data) {
+        let callback = data.pop();
+        data.unshift(key);
+        data.forEach(value => {
+            if (value.split('+').length == 1 && value.split('+')[0].length > 1)
+                value = value.toLowerCase();
+            this.listen_to.push({
+                combination: value.trim(),
+                callback: (data = null) => callback(data)
+            });
         });
         return this;
     }
@@ -100,7 +104,7 @@ export class KeyBinder {
         if (combination_data.combination === '***') {
             settings = Object.assign(Object.assign({}, settings), { combination: this.last_combination });
         }
-        console.log(combination_data);
+        // console.log(combination_data)
         if (combination_data)
             combination_data === null || combination_data === void 0 ? void 0 : combination_data.callback(Object.assign({}, settings));
     }
