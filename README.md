@@ -1,6 +1,6 @@
 # Key Bonder/Binder
 
-This is a react.js library that helps with keyboard binding and input devices in general
+This is a javascript library (both vallina and frameworks) for frontend that helps with keyboard binding and input devices in general within the browser
 
 ```js
 ListenToKey('enter', (data) => {

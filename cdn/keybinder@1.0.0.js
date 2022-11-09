@@ -1,4 +1,4 @@
-export class KeyBinder {
+class KeyBinder {
     constructor(settings) {
         this.settings = {
             default_listner: 'keypress',

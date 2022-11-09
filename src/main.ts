@@ -39,10 +39,10 @@ export class KeyBinder {
         if(!element) throw new Error('No element provided')
         element?.addEventListener(listner, (e) => {
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
+            e.preventDefault()
             let can_shift = this.can_shift+this.can_shift.toUpperCase()
             let key = e?.key
             // console.log(key)
-            e.preventDefault()
             clearTimeout(this.timer_lsitner)
             if(!this.just_listened){
                 this.current_stroke = []
@@ -90,20 +90,26 @@ export class KeyBinder {
         })
         return this
     }
+    sortCombinations(){
+        const any_key_combination = this.listen_to.filter(value => value?.combination === '***')[0]
+        this.listen_to = this.listen_to.filter(value => value?.combination !== '***').sort()
+        if(any_key_combination) this.listen_to.push(any_key_combination)
+        return this
+    }
     /**
      * This is the functioned called after the combination is made
      */
     handleKey(){
+        this.sortCombinations()
+        console.log(this.listen_to)
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase()
         let combination_data = this.listen_to.filter((data) => {
             const key = this.settings.case_sensitive ? data.combination: data.combination.toLowerCase()
             return key === key_combination || key === "***"
         })[0],
         settings = {...combination_data, ...this.settings}
-        if(combination_data.combination === '***'){
-            settings = {...settings, combination:this.last_combination}
-        } 
-        // console.log(combination_data)
+        if(combination_data.combination === '***') settings = {...settings, combination:this.last_combination}
+        
         if(combination_data) combination_data?.callback({...settings})
     }
 
