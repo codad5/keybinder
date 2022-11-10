@@ -86,9 +86,7 @@ Windows - Home Buttom | meta
 | Listen to any other key | ***
 
 ## Todos
-- [ ] Add listener for mouse event
-- [ ] Add listener for Gamepad/JoyStick
-- [ ] Add listener for USB insert
+- [ ] Accept Your pull request ✔
 
 > This is built by [Codad5](https://github.com/codad5) and [ptbysr](https://github.com/ptbysr) with ❤ and ⚡
 
