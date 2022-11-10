@@ -1,5 +1,5 @@
 export  type Keybinder_setting = {
-    default_listner : key_listner,
+    default_listener : key_listener,
     element ?: Element|Window ,
     case_sensitive ?: boolean
 }
@@ -10,4 +10,4 @@ export type KeyCombination = {
 
 }
 
-export type key_listner = 'keypress' | 'keyup' | 'keydown'
+export type key_listener = 'keypress' | 'keyup' | 'keydown'

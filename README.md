@@ -2,20 +2,16 @@
 
 This is a javascript library (both vallina and frameworks) for frontend that helps with keyboard binding and input devices in general within the browser
 
-```js
-ListenToKey('enter', (data) => {
-        alert(`your called ${data.combination}`)
-    })
-```
-
 This currently supports most keys in `windows OS` you can visit the [Home page]() to check the key code for your machine 
 
 ## How to use
 ### Install and Import
 
-#### Using CDN
+#### Using Vallina javascript
 ```js
-<script type="module" src="https"></script>
+<script type="module">
+    import { KeyBinder } from 'https://codad5.github.io/keybinder/out/index.js'
+</script>
 ```
 
 #### Using a framework
@@ -32,21 +28,20 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
 
 - Define your keyboard Controller
 ```js
-mport { KeyBinder as KeyBinder } from 'keyBinder'
 const keyController = new KeyBinder({
-    default_listner: 'keyup', // can be keydown, keypress
+    default_listener: 'keyup', // can be keydown, keypress
     element: window, // can be any element or window eg `docmuent.querySelector('.myeditor')
-    // case_sensitive:true // this is if you want to make the listner case sensitive
+    // case_sensitive:true // this is if you want to make the listener case sensitive
 })
 ```
 
-- Add your listner
+- Add your listener
 
 For easier and better coding experience it best to create a sub function like this 
 ```js
 const ListenToKey = (key, ...data) => keyController.ListenToKey(key, ...data)
 ```
-Then you can add listners like this 
+Then you can add listeners like this 
 ```js 
 istenToKey('B+G', () => {
         alert(`your called ${data.combination}`)
@@ -75,7 +70,7 @@ keyController.ListenToKey('ctrl+space', () => {
 Check Our Test Website to see the avaliable key commands for
 
 
-| Key | Listner - Command | 
+| Key | listener - Command | 
 | :---: | :---: | 
 | Control | ctrl |
 | Shift | Shift |
@@ -91,9 +86,9 @@ Windows - Home Buttom | meta
 | Listen to any other key | ***
 
 ## Todos
-- [ ] Add listner for mouse event
-- [ ] Add Listner for Gamepad/JoyStick
-- [ ] Add Listner for USB insert
+- [ ] Add listener for mouse event
+- [ ] Add listener for Gamepad/JoyStick
+- [ ] Add listener for USB insert
 
 > This is built by [Codad5](https://github.com/codad5) and [ptbysr](https://github.com/ptbysr) with ❤ and ⚡
 

@@ -1,8 +1,8 @@
-import type {Keybinder_setting, key_listner as key_listner, KeyCombination} from './types.js'
+import type {Keybinder_setting, key_listener as key_listener, KeyCombination} from './types.js'
 export class KeyBinder {
     
     readonly settings: Keybinder_setting = {
-        default_listner: 'keypress',
+        default_listener: 'keypress',
         element: window,
         case_sensitive:false
     }
@@ -11,7 +11,7 @@ export class KeyBinder {
     last_combination :string = ''
     timer_lsitner ?: NodeJS.Timeout
     just_listened = false
-    main_listner: any
+    main_listener: any
     timer = 200
     current_stroke: String[] = []
     private listen_to : KeyCombination[] = []
@@ -32,12 +32,12 @@ export class KeyBinder {
     }
     /**
      * 
-     * @param listner This is type of event to be listened to.
+     * @param listener This is type of event to be listened to.
      * @param element The element you want to be listened to
      */
-    private listner(listner: key_listner = 'keypress', element: Element|Window|undefined|null){
+    private listener(listener: key_listener = 'keypress', element: Element|Window|undefined|null){
         if(!element) throw new Error('No element provided')
-        element?.addEventListener(listner, (e) => {
+        element?.addEventListener(listener, (e) => {
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault()
             let can_shift = this.can_shift+this.can_shift.toUpperCase()
@@ -52,8 +52,8 @@ export class KeyBinder {
             e?.altKey && this.current_stroke.indexOf('alt') < 0  ? this.current_stroke.push('alt') : null
             e?.metaKey && this.current_stroke.indexOf('meta') < 0  ? this.current_stroke.push('meta') : null
             e?.shiftKey && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e?.key}`) >= 0 && `${e?.key}`.length == 1 ? this.current_stroke.push('shift') : null
-            if(listner == 'keypress')  key = `${e?.key}`.length > 1 ? e?.code[e?.code.length - 1] : e?.key
-            if(listner != 'keypress' && this.meta_keys.indexOf('key') >= 0)key = null
+            if(listener == 'keypress')  key = `${e?.key}`.length > 1 ? e?.code[e?.code.length - 1] : e?.key
+            if(listener != 'keypress' && this.meta_keys.indexOf('key') >= 0)key = null
             // console.log(key)
             if(`${key}`.length > 1) key = `${key}`.toLowerCase()
             // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
@@ -71,7 +71,7 @@ export class KeyBinder {
      * 
      */
     private startListening(){
-        this.main_listner = this.listner(this.settings.default_listner, this.settings.element)
+        this.main_listener = this.listener(this.settings.default_listener, this.settings.element)
     }
     /**
      * This is the function that assemble all the key combination to be listened to by the

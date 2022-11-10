@@ -1,7 +1,7 @@
 export class KeyBinder {
     constructor(settings) {
         this.settings = {
-            default_listner: 'keypress',
+            default_listener: 'keypress',
             element: window,
             case_sensitive: false
         };
@@ -28,13 +28,13 @@ export class KeyBinder {
     }
     /**
      *
-     * @param listner This is type of event to be listened to.
+     * @param listener This is type of event to be listened to.
      * @param element The element you want to be listened to
      */
-    listner(listner = 'keypress', element) {
+    listener(listener = 'keypress', element) {
         if (!element)
             throw new Error('No element provided');
-        element === null || element === void 0 ? void 0 : element.addEventListener(listner, (e) => {
+        element === null || element === void 0 ? void 0 : element.addEventListener(listener, (e) => {
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault();
             let can_shift = this.can_shift + this.can_shift.toUpperCase();
@@ -49,9 +49,9 @@ export class KeyBinder {
             (e === null || e === void 0 ? void 0 : e.altKey) && this.current_stroke.indexOf('alt') < 0 ? this.current_stroke.push('alt') : null;
             (e === null || e === void 0 ? void 0 : e.metaKey) && this.current_stroke.indexOf('meta') < 0 ? this.current_stroke.push('meta') : null;
             (e === null || e === void 0 ? void 0 : e.shiftKey) && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e === null || e === void 0 ? void 0 : e.key}`) >= 0 && `${e === null || e === void 0 ? void 0 : e.key}`.length == 1 ? this.current_stroke.push('shift') : null;
-            if (listner == 'keypress')
+            if (listener == 'keypress')
                 key = `${e === null || e === void 0 ? void 0 : e.key}`.length > 1 ? e === null || e === void 0 ? void 0 : e.code[(e === null || e === void 0 ? void 0 : e.code.length) - 1] : e === null || e === void 0 ? void 0 : e.key;
-            if (listner != 'keypress' && this.meta_keys.indexOf('key') >= 0)
+            if (listener != 'keypress' && this.meta_keys.indexOf('key') >= 0)
                 key = null;
             // console.log(key)
             if (`${key}`.length > 1)
@@ -72,7 +72,7 @@ export class KeyBinder {
      *
      */
     startListening() {
-        this.main_listner = this.listner(this.settings.default_listner, this.settings.element);
+        this.main_listener = this.listener(this.settings.default_listener, this.settings.element);
     }
     /**
      * This is the function that assemble all the key combination to be listened to by the
