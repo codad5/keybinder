@@ -116,16 +116,3 @@ class KeyBinder {
             combination_data === null || combination_data === void 0 ? void 0 : combination_data.callback(Object.assign({}, settings));
     }
 }
-// How it works
-/**
- * How This will work
- * There will be an array that has all the list of  keybind to activate like ['crtl+b+c', 'alt+z']
- * Then they will be a class that listen to key type
- * on any key type , the keyname will be appended to an array that collect like of keypress in the last 1 sec
- * there will be a property time that manage time
- * if key event is triggered the time will be set to one sec
- * else it will combine all join all the array item of pressed key with array.join('+')
- * then check if such property exist in the array of keys
- * if it does it will call the callback function to that passing in a data on default
- *
- */ 

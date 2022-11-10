@@ -4,6 +4,13 @@ This is a javascript library (both vallina and frameworks) for frontend that hel
 
 This currently supports most keys in `windows OS` you can visit the [Home page]() to check the key code for your machine 
 
+### Requirement 
+- Your script need to be running on a web server, for development you could use,
+    - live server extension is vscode 
+    - node npx server by running `npx serve`
+  - to avoid errors like 
+  ![KeyBinder Cors error](./.git/img/cors-error.png)
+    
 ## How to use
 ### Install and Import
 
