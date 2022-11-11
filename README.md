@@ -74,6 +74,16 @@ keyController.ListenToKey('ctrl+space', () => {
 })
 ```
 
+#### Diffrent Combination one action
+This is if you want to one action(callback), tied to different combination
+```js
+ListenToKey('ctrl+space', 'ctrl+m', () => {
+    alert(`your called ${data.combination}`)
+    document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
+})
+```
+
+
 Check Our Test Website to see the avaliable key commands for
 
 
