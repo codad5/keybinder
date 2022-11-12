@@ -1,9 +1,12 @@
 import type {Keybinder_setting, key_listener as key_listener, KeyCombination} from './types.js'
 // merge into WindowEventMap
-declare global {
-  interface WindowEventMap {
-    OnRewards: KeyboardEvent
-  }
+//extend a new interface to event type and keyboardevnt
+interface myEvent extends Event ,  KeyboardEvent{
+    key: string;
+    code: string;
+    ctrlKey: boolean;
+    shiftKey: boolean;
+    altKey: boolean;
 }
 export class KeyBinder {
     
@@ -44,7 +47,7 @@ export class KeyBinder {
     private listener(listener: key_listener = 'keypress', element: Element|Window|undefined|null){
         if(!element) throw new Error('No element provided')
         // set type of listener to keyboard event
-        element?.addEventListener(listener, (e: KeyboardEvent) => {
+        element?.addEventListener(listener, (e: myEvent) => {
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault()
             let can_shift = this.can_shift+this.can_shift.toUpperCase()
@@ -89,6 +92,7 @@ export class KeyBinder {
         let callback = data.pop()
         data.unshift(key)
         data.forEach(value => {
+            if(typeof value !== 'string') return 
             if(value.split('+').length == 1 && value.split('+')[0].length > 1)value = value.toLowerCase()
             this.listen_to.push({
                 combination:value.trim(),

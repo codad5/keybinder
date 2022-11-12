@@ -2,7 +2,8 @@
   "name": "domkeybinder",
   "version": "1.0.0",
   "description": "This helps to manage key biniding command ",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "keywords": [
     "keybinder",
     "keybinding",
@@ -14,6 +15,11 @@
     "dom",
     "javascript"
   ],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "homepage": "https://github.com/Codad5/keybinder",
   "type": "module",
   "repository": {
@@ -21,8 +27,8 @@
     "url": "https://github.com/Codad5/keybinder"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch:ts": "tsc  -p ./ --outDir ./out -w --pretty",
+    "test": "echo   \"Error: no test specified\" && exit 1",
+    "watch:ts": "tsc  -p ./ --outDir ./dist -w --pretty",
     "build": "npm run build:ts && npm run build:cjs",
     "build:ts": "tsc",
     "build:cjs": "tsc --outDir dist/cjs",
@@ -32,6 +38,7 @@
   "author": "Codad5,ptbysr",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.3.1",
     "tslib": "^2.4.1"
   }
 }
