@@ -3,7 +3,7 @@
 export class KeyBinder {
     constructor(settings) {
         this.settings = {
-            default_listener: 'keypress',
+            listener_type: 'keypress',
             element: window,
             case_sensitive: false
         };
@@ -78,7 +78,7 @@ export class KeyBinder {
      *
      */
     startListening() {
-        this.main_listener = this.listener(this.settings.default_listener, this.settings.element);
+        this.main_listener = this.listener(this.settings.listener_type, this.settings.element);
     }
     /**
      * This is the function that assemble all the key combination to be listened to by the

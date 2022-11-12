@@ -1,5 +1,5 @@
 {
-  "transform": {},
-  "moduleFileExtensions": ["ts", "js", "json", "node"],
-  "testEnvironment": "jsdom"
+  "testEnvironment": "jest-environment-node",
+  "transform": {},    
+  "moduleFileExtensions": ["ts", "js", "json", "node"]
 }

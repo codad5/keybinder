@@ -1,11 +1,11 @@
-import type {Keybinder_setting, key_listener as key_listener, KeyCombination} from './types.js'
+import { Keybinder_setting, key_listener as key_listener, KeyCombination} from './types'
 // merge into WindowEventMap
 //extend a new interface to event type and keyboardevnt
 
 export class KeyBinder {
     
-    readonly settings: Keybinder_setting = {
-        default_listener: 'keypress',
+        settings : Keybinder_setting= {
+        listener_type: 'keypress',
         element: window,
         case_sensitive:false
     }
@@ -77,7 +77,7 @@ export class KeyBinder {
      * 
      */
     private startListening(){
-        this.main_listener = this.listener(this.settings.default_listener, this.settings.element)
+        this.main_listener = this.listener(this.settings.listener_type, this.settings.element)
     }
     /**
      * This is the function that assemble all the key combination to be listened to by the

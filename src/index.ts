@@ -1,2 +1,2 @@
-import { KeyBinder as KeyBinder } from './components/main.js'
+import { KeyBinder } from './components/main'
 export {KeyBinder}
