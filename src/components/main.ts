@@ -1,13 +1,7 @@
 import type {Keybinder_setting, key_listener as key_listener, KeyCombination} from './types.js'
 // merge into WindowEventMap
 //extend a new interface to event type and keyboardevnt
-interface myEvent extends Event ,  KeyboardEvent{
-    key: string;
-    code: string;
-    ctrlKey: boolean;
-    shiftKey: boolean;
-    altKey: boolean;
-}
+
 export class KeyBinder {
     
     readonly settings: Keybinder_setting = {
@@ -47,7 +41,9 @@ export class KeyBinder {
     private listener(listener: key_listener = 'keypress', element: Element|Window|undefined|null){
         if(!element) throw new Error(`Error in event element ( ${this.settings.element} )`)
         // set type of listener to keyboard event
-        element?.addEventListener(listener, (e: KeyboardEvent) => {
+        element?.addEventListener(listener, (e) => {
+            //check if e is type of KeyboardEvent
+            if(!(e instanceof KeyboardEvent)) return
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault()
             let can_shift = this.can_shift+this.can_shift.toUpperCase()

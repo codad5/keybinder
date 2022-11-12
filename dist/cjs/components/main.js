@@ -1,3 +1,5 @@
+// merge into WindowEventMap
+//extend a new interface to event type and keyboardevnt
 export class KeyBinder {
     constructor(settings) {
         this.settings = {
@@ -36,6 +38,9 @@ export class KeyBinder {
             throw new Error(`Error in event element ( ${this.settings.element} )`);
         // set type of listener to keyboard event
         element === null || element === void 0 ? void 0 : element.addEventListener(listener, (e) => {
+            //check if e is type of KeyboardEvent
+            if (!(e instanceof KeyboardEvent))
+                return;
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault();
             let can_shift = this.can_shift + this.can_shift.toUpperCase();
@@ -95,8 +100,6 @@ export class KeyBinder {
                 callback: (data = null) => callback(data)
             });
         });
-        // remove duplicates object with the same combination and callback property
-        this.listen_to = this.listen_to.filter((value, index, self) => index === self.findIndex((t) => (t.combination === value.combination && t.callback === value.callback)));
         return this;
     }
     sortCombinations() {
