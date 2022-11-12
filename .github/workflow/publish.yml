@@ -1,0 +1,8 @@
+name: publish
+
+on:
+  push: 
+    [main]
+  pull_request:
+    [main]
+    

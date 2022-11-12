@@ -3,7 +3,7 @@ const keyController = new KeyBinder({
     element: window,
     // case_sensitive:true
 })
-
+// https://unpkg.com/lodash@4.17.20
 // const ListenToKey = (key, data) => keyController.ListenToKey(key, data)
 const ListenToKey = (key, ...data) => keyController.ListenToKey(key, ...data)
 
