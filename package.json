@@ -17,9 +17,9 @@
     "javascript"
   ],
   "files": [
-  "dist",
-  "LICENSE",
-  "README.md"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "homepage": "https://github.com/Codad5/keybinder",
   "type": "module",
@@ -34,11 +34,16 @@
     "build:ts": "tsc",
     "build:cjs": "tsc --outDir dist/cjs",
     "build:cdn": "nodemon -i ./cdn ./private/compile.js",
-    "php": "php -S localhost:4000"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
   },
   "author": "Codad5,ptbysr",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.3.1",
+    "jest-canvas-mock": "^2.4.0",
+    "jest-environment-jsdom": "^29.3.1",
+    "ts-jest": "^29.0.3",
     "tslib": "^2.4.1"
   }
 }
