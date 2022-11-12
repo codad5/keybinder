@@ -45,14 +45,14 @@ export class KeyBinder {
      * @param element The element you want to be listened to
      */
     private listener(listener: key_listener = 'keypress', element: Element|Window|undefined|null){
-        if(!element) throw new Error('No element provided')
+        if(!element) throw new Error(`Error in event element ( ${this.settings.element} )`)
         // set type of listener to keyboard event
-        element?.addEventListener(listener, (e: myEvent) => {
+        element?.addEventListener(listener, (e: KeyboardEvent) => {
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault()
             let can_shift = this.can_shift+this.can_shift.toUpperCase()
             let key : string|null = e?.key
-            // console.log(key)
+            // //console.log(key)
             clearTimeout(this.timer_lsitner)
             if(!this.just_listened){
                 this.current_stroke = []
@@ -64,16 +64,16 @@ export class KeyBinder {
             e?.shiftKey && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e?.key}`) >= 0 && `${e?.key}`.length == 1 ? this.current_stroke.push('shift') : null
             if(listener == 'keypress')  key = `${e?.key}`.length > 1 ? e?.code[e?.code.length - 1] : e?.key
             if(listener != 'keypress' && this.meta_keys.indexOf('key') >= 0)key = null
-            // console.log(key)
+            // //console.log(key)
             if(`${key}`.length > 1) key = `${key}`.toLowerCase()
             // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
             if(e?.key.trim().length == 0) key = 'space'
-            // console.log(key)
+            // //console.log(key)
             key ? this.current_stroke.push(key) : null
             this.last_combination = this.current_stroke.join('+')
             this.timer_lsitner = this.setTimeout(this.timer - 10)
             this.just_listened = true
-            // console.log(this.current_stroke, can_shift.indexOf(e?.key))
+            // //console.log(this.current_stroke, can_shift.indexOf(e?.key))
         })
     }
     /**
@@ -89,11 +89,13 @@ export class KeyBinder {
      * @callback callback this is the function is to be called after
      */
     ListenToKey(key: string, ...data: any[]): this{
-        let callback = data.pop()
+        //console.log(`adding`)
         data.unshift(key)
+        let callback = data.pop()
         data.forEach(value => {
             if(typeof value !== 'string') return 
             if(value.split('+').length == 1 && value.split('+')[0].length > 1)value = value.toLowerCase()
+            //console.log(`added ${value.trim()} to key_listener`)
             this.listen_to.push({
                 combination:value.trim(),
                 callback: (data = null) => callback(data)
@@ -111,15 +113,16 @@ export class KeyBinder {
      * This is the functioned called after the combination is made
      */
     handleKey(){
+        //console.log(this.listen_to)
         this.sortCombinations()
-        console.log(this.listen_to)
+        //console.log(this.listen_to)
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase()
         let combination_data = this.listen_to.filter((data) => {
             const key = this.settings.case_sensitive ? data.combination: data.combination.toLowerCase()
             return key === key_combination || key === "***"
         })[0],
         settings = {...combination_data, ...this.settings}
-        if(combination_data.combination === '***') settings = {...settings, combination:this.last_combination}
+        if(combination_data?.combination === '***') settings = {...settings, combination:this.last_combination}
         
         if(combination_data) combination_data?.callback({...settings})
     }
