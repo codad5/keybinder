@@ -1,16 +1,12 @@
 name: publish
 
 on:
-  push: 
+  pull_request: 
     branches: [main]
-  pull_request:
-    branches: [main]
-    types: [closed]
 
 jobs: 
   build:
     runs-on : ubuntu-latest
-
     steps:
     name: Checkout
         uses: actions/checkout@v3
@@ -18,17 +14,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: npm ci
-      - name: Test Suite
-        run: npm run test
       - name: Build
         run: npm build
-      - name: Publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET }}
+      - name: Test Suite
+        run: npm run test
 
 
     

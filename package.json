@@ -28,7 +28,7 @@
     "url": "https://github.com/Codad5/keybinder"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "watch:ts": "tsc  -p ./ --outDir ./out -w --pretty",
     "build": "npm run build:ts && npm run build:cjs",
     "build:ts": "tsc",
