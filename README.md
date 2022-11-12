@@ -17,18 +17,18 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
 #### Using Vallina javascript
 ```js
 <script type="module">
-    import { KeyBinder } from 'https://codad5.github.io/keybinder/out/index.js'
+    import { KeyBinder } from 'https://codad5.github.io/keybinder/dist/cjs/src/index.js'
 </script>
 ```
 
 #### Using a framework
 - Install
     ```bash
-    npm i KeyBinder
+    npm i domkeybinder
     ```
 - Import
     ```js
-    import {KeyBinder} from 'keyBinder'
+    import {KeyBinder} from 'domkeybinder'
     ```
         
 ### Initialize your controller object
