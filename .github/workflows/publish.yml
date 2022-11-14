@@ -3,13 +3,13 @@ name: publish
 on:
   push: 
     branches: [main]
-  pull_request:
+  pull_request: 
     types: [closed]
     branches: [main]
 
 jobs: 
   build:
-    name: Pusblishing
+    name: Publishing
     runs-on : ubuntu-latest
     steps:
       - name: Checkout
@@ -21,10 +21,12 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: npm ci
+      - name: Build
+        run: npm build
       - name: Test Suite
         run: npm run test
       - name: Build
-        run: npm build
+        run: npm run build
       - name: Publish
         run: npm publish
         env:
