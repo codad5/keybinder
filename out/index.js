@@ -1,2 +1,2 @@
-import { KeyBinder } from './components/main';
+import { KeyBinder } from './components/main.js';
 export { KeyBinder };
