@@ -1,6 +1,6 @@
 {
   "name": "domkeybinder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This helps to manage key biniding command ",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -34,7 +34,7 @@
     "build:ts": "tsc",
     "build:cjs": "tsc --outDir dist/cjs",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm run test"
   },
   "author": "Codad5,ptbysr",
   "license": "ISC",
