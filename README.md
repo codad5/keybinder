@@ -1,8 +1,8 @@
 # Key Bonder/Binder
 
-This is a javascript library (both vallina and frameworks) for frontend that helps with keyboard binding and input devices in general within the browser
+This is a javascript library (both vallina and frameworks) for frontend that helps with keyboard binding .
 
-This currently supports most keys in `windows OS` you can visit the [Home page]() to check the key code for your machine 
+This currently supports most keys in `windows OS` you can visit the [Home page](https://codad5.github.io/keybinder/) to check the key code for your machine 
 
 ### Requirement 
 - Your script need to be running on a web server, for development you could use,
