@@ -36,7 +36,8 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
 const keyController = new KeyBinder({
     default_listener: 'keyup', // can be keydown, keypress
     element: window, // can be any element or window eg `docmuent.querySelector('.myeditor')
-    // case_sensitive:true // this is if you want to make the listener case sensitive
+    // case_sensitive:true, // this is if you want to make the listener case sensitive
+    allow_default: true // this is set to default of false and prevents any default keyboard action
 })
 ```
 

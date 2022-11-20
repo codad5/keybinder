@@ -1,23 +1,23 @@
 import { Keybinder_setting, key_listener as key_listener, KeyCombination} from './types'
-// merge into WindowEventMap
-//extend a new interface to event type and keyboardevnt
 
 export class KeyBinder {
     
         settings : Keybinder_setting = {
         listener_type: 'keypress',
         element: window,
-        case_sensitive:false
+        case_sensitive:false,
+        allow_default:false,
     }
     private readonly meta_keys = ['Control', 'Shift', 'Alt', 'Meta'].map(v => v.toLowerCase());
     private readonly can_shift = 'abcdefghijklmnopqrstuvwxyz1234567890'
-    last_combination :string = ''
-    timer_lsitner ?: NodeJS.Timeout
-    just_listened = false
-    main_listener: any
-    timer = 200
-    current_stroke: String[] = []
+    private last_combination :string = ''
+    private timer_lsitner ?: NodeJS.Timeout
+    private just_listened = false
+    private main_listener: any
+    private timer = 200
+    private current_stroke: String[] = []
     private listen_to : KeyCombination[] = []
+    private backup_listener : KeyCombination[] = []
     constructor(settings ?: Keybinder_setting){
         this.settings = {...this.settings, ...settings}
         this.startListening()
@@ -45,7 +45,10 @@ export class KeyBinder {
             //check if e is type of KeyboardEvent
             if(!(e instanceof KeyboardEvent)) return
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
-            e.preventDefault()
+            if(this.settings.allow_default){
+                e.preventDefault()
+                e.stopPropagation();
+            }
             let can_shift = this.can_shift+this.can_shift.toUpperCase()
             let key : string|null = e?.key
             // //console.log(key)
@@ -98,10 +101,10 @@ export class KeyBinder {
                 callback: (data = null) => callback(data)
             })
         })
-        return this
+        return this.sortCombinations()
     }
     sortCombinations(){
-        console.log(this.listen_to)
+        // console.log(this.listen_to)
         const any_key_combination = this.listen_to.filter(value => value?.combination === '***')[0]
         this.listen_to = this.listen_to.filter(value => value?.combination !== '***').sort()
         //remove duplicate combinations
@@ -127,7 +130,33 @@ export class KeyBinder {
         
         if(combination_data) combination_data?.callback({...settings})
     }
-
+    /**
+     * Get all the key combinations that are being listened to
+     * 
+     * @returns {Array} an array of all the key combinations
+     * 
+     */
+    getCombinations(){
+        return this.listen_to
+    }
+    
+    /**
+     * This is the function that stops listening to the key combination
+     * 
+    */
+    clear(){
+        this.backup_listener = this.listen_to
+        this.listen_to = []
+        return this
+    }
+    /**
+     * Restarts the listening to the key combination
+     * @returns {this} the instance of the class
+     */
+    restore(){
+        this.listen_to = this.backup_listener
+        return this
+    }
 
 
 }
