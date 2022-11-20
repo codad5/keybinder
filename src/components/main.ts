@@ -48,8 +48,8 @@ export class KeyBinder {
             e.preventDefault()
             let can_shift = this.can_shift+this.can_shift.toUpperCase()
             let key : string|null = e?.key
-            // //console.log(key)
-            console.log(e.key)
+            // //// console.log(key)
+            // console.log(e.key)
             clearTimeout(this.timer_lsitner)
             if(!this.just_listened){
                 this.current_stroke = []
@@ -61,16 +61,16 @@ export class KeyBinder {
             e?.shiftKey && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e?.key}`) >= 0 && `${e?.key}`.length == 1 ? this.current_stroke.push('shift') : null
             if(listener == 'keypress' && e.code.toLowerCase() !== 'enter')  key = `${e?.key}`.length > 1 ? e?.code[e?.code.length - 1] : e?.key
             if(listener != 'keypress' && this.meta_keys.indexOf('key') >= 0)key = null
-            // //console.log(key)
+            // //// console.log(key)
             if(`${key}`.length > 1) key = `${key}`.toLowerCase()
             // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
             if(e?.key.trim().length == 0) key = 'space'
-            console.log(e.code, listener)
+            // console.log(e.code, listener)
             key ? this.current_stroke.push(key) : null
             this.last_combination = this.current_stroke.join('+')
             this.timer_lsitner = this.setTimeout(this.timer - 10)
             this.just_listened = true
-            // //console.log(this.current_stroke, can_shift.indexOf(e?.key))
+            // //// console.log(this.current_stroke, can_shift.indexOf(e?.key))
         })
     }
     /**
@@ -86,13 +86,13 @@ export class KeyBinder {
      * @callback callback this is the function is to be called after
      */
     ListenToKey(key: string, ...data: any[]): this{
-        //console.log(`adding`)
+        //// console.log(`adding`)
         data.unshift(key)
         let callback = data.pop()
         data.forEach(value => {
             if(typeof value !== 'string') return 
             if(value.split('+').length == 1 && value.split('+')[0].length > 1)value = value.toLowerCase()
-            //console.log(`added ${value.trim()} to key_listener`)
+            //// console.log(`added ${value.trim()} to key_listener`)
             this.listen_to.push({
                 combination:value.trim(),
                 callback: (data = null) => callback(data)
@@ -101,7 +101,7 @@ export class KeyBinder {
         return this
     }
     sortCombinations(){
-        console.log(this.listen_to)
+        // console.log(this.listen_to)
         const any_key_combination = this.listen_to.filter(value => value?.combination === '***')[0]
         this.listen_to = this.listen_to.filter(value => value?.combination !== '***').sort()
         //remove duplicate combinations
@@ -113,10 +113,10 @@ export class KeyBinder {
      * This is the functioned called after the combination is made
      */
     handleKey(){
-        //console.log(this.listen_to)
+        //// console.log(this.listen_to)
         this.sortCombinations()
-        //console.log(this.listen_to)
-        console.log(this.last_combination, this.current_stroke)
+        //// console.log(this.listen_to)
+        // console.log(this.last_combination, this.current_stroke)
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase()
         let combination_data = this.listen_to.filter((data) => {
             const key = this.settings.case_sensitive ? data.combination: data.combination.toLowerCase()
