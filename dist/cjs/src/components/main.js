@@ -1,9 +1,12 @@
+// merge into WindowEventMap
+//extend a new interface to event type and keyboardevnt
 export class KeyBinder {
     constructor(settings) {
         this.settings = {
             listener_type: 'keypress',
             element: window,
-            case_sensitive: false
+            case_sensitive: false,
+            allow_default: false,
         };
         this.meta_keys = ['Control', 'Shift', 'Alt', 'Meta'].map(v => v.toLowerCase());
         this.can_shift = 'abcdefghijklmnopqrstuvwxyz1234567890';
@@ -28,6 +31,7 @@ export class KeyBinder {
         element === null || element === void 0 ? void 0 : element.addEventListener(listener, (e) => {
             if (!(e instanceof KeyboardEvent))
                 return;
+            // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
             e.preventDefault();
             let can_shift = this.can_shift + this.can_shift.toUpperCase();
             let key = e === null || e === void 0 ? void 0 : e.key;

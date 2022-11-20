@@ -36,7 +36,8 @@ import KeyBinder from 'domkeybinder'
 const keyController = new KeyBinder({
     default_listener: 'keyup', // can be keydown, keypress
     element: window, // can be any element or window eg `docmuent.querySelector('.myeditor')
-    // case_sensitive:true // this is if you want to make the listener case sensitive
+    // case_sensitive:true, // this is if you want to make the listener case sensitive
+    allow_default: true // this is set to default of false and prevents any default keyboard action
 })
 ```
 
@@ -76,6 +77,16 @@ ListenToKey('ctrl+space', 'ctrl+m', () => {
     document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
 })
 ```
+
+#### Avaliable methods
+
+| method | Description |
+| :---: | :---: |
+| ListenToKey | Add new Listener |
+| getCombinations | Get all avaliable combinations|
+| clear | Remove all avaliable combinations|
+| restore | Restore all previous avaliable combinations|
+
 
 
 Check Our Test Website to see the avaliable key commands for
