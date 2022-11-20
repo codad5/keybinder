@@ -1,6 +1,6 @@
 {
   "name": "domkeybinder",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This helps to manage key biniding command ",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
