@@ -9,7 +9,7 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
     - live server extension is vscode 
     - node npx server by running `npx serve`
   - to avoid errors like 
-  ![KeyBinder Cors error](./.git/img/cors-error.png)
+  ![KeyBinder Cors error](.git/img/cors-error.png)
     
 ## How to use
 ### Install and Import
@@ -21,13 +21,13 @@ This currently supports most keys in `windows OS` you can visit the [Home page](
 
 #### Using a framework
 - Install
-    ```bash
-    npm i domkeybinder
-    ```
+```bash
+npm i domkeybinder
+```
 - Import
-    ```js
-    import KeyBinder from 'domkeybinder'
-    ```
+```js
+import KeyBinder from 'domkeybinder'
+```
         
 ### Initialize your controller object
 
@@ -49,27 +49,23 @@ const ListenToKey = (key, ...data) => keyController.ListenToKey(key, ...data)
 ```
 Then you can add listeners like this 
 ```js 
-istenToKey('B+G', () => {
-        alert(`your called ${data.combination}`)
-        document.querySelector('#bcdiv').innerHTML += 'Your Called me ?'
-    })
+ListenToKey('B+G', () => {
+    //your code...
+})
 
 ListenToKey('shift+c', () => {
-    document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
+    //your code...
 })
 
 ```
 > OR this
 ```js
 keyController.ListenToKey('enter', (data) => {
-    alert(`your called ${data.combination}`)
-    console.table({...data, element: 'Window'})
-    
+    //your code...
 })
 
 keyController.ListenToKey('ctrl+space', () => {
-    alert(`your called ${data.combination}`)
-    document.querySelector('#scdiv').innerHTML += 'Do you mean Ctrl+c? try Ctrl+c'
+    //your code...
 })
 ```
 
