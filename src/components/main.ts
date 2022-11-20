@@ -26,7 +26,7 @@ export class KeyBinder {
      * This set and check for the key combination done under the time set
      * @param time the time to wait for the key combination to be done
      */
-    setTimeout(time = this.timer){
+    protected setTimeout(time = this.timer){
         time = time < 95 ? this.timer : time
         return setTimeout(() => { 
             this.just_listened = false
@@ -103,7 +103,7 @@ export class KeyBinder {
         })
         return this.sortCombinations()
     }
-    sortCombinations(){
+    private sortCombinations(){
         // console.log(this.listen_to)
         const any_key_combination = this.listen_to.filter(value => value?.combination === '***')[0]
         this.listen_to = this.listen_to.filter(value => value?.combination !== '***').sort()
@@ -115,7 +115,7 @@ export class KeyBinder {
     /**
      * This is the functioned called after the combination is made
      */
-    handleKey(){
+    private handleKey(){
         //console.log(this.listen_to)
         this.sortCombinations()
         //console.log(this.listen_to)
@@ -153,7 +153,7 @@ export class KeyBinder {
      * Restarts the listening to the key combination
      * @returns {this} the instance of the class
      */
-    restore(){
+    restore(): this{
         this.listen_to = this.backup_listener
         return this
     }

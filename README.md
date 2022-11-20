@@ -82,6 +82,16 @@ ListenToKey('ctrl+space', 'ctrl+m', () => {
 })
 ```
 
+#### Avaliable methods
+
+| method | Description |
+| :---: | :---: |
+| ListenToKey | Add new Listener |
+| getCombinations | Get all avaliable combinations|
+| clear | Remove all avaliable combinations|
+| restore | Restore all previous avaliable combinations|
+
+
 
 Check Our Test Website to see the avaliable key commands for
 
