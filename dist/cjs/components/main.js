@@ -46,6 +46,7 @@ export class KeyBinder {
             let can_shift = this.can_shift + this.can_shift.toUpperCase();
             let key = e === null || e === void 0 ? void 0 : e.key;
             // //console.log(key)
+            console.log(e.key);
             clearTimeout(this.timer_lsitner);
             if (!this.just_listened) {
                 this.current_stroke = [];
@@ -55,7 +56,7 @@ export class KeyBinder {
             (e === null || e === void 0 ? void 0 : e.altKey) && this.current_stroke.indexOf('alt') < 0 ? this.current_stroke.push('alt') : null;
             (e === null || e === void 0 ? void 0 : e.metaKey) && this.current_stroke.indexOf('meta') < 0 ? this.current_stroke.push('meta') : null;
             (e === null || e === void 0 ? void 0 : e.shiftKey) && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e === null || e === void 0 ? void 0 : e.key}`) >= 0 && `${e === null || e === void 0 ? void 0 : e.key}`.length == 1 ? this.current_stroke.push('shift') : null;
-            if (listener == 'keypress')
+            if (listener == 'keypress' && e.code.toLowerCase() !== 'enter')
                 key = `${e === null || e === void 0 ? void 0 : e.key}`.length > 1 ? e === null || e === void 0 ? void 0 : e.code[(e === null || e === void 0 ? void 0 : e.code.length) - 1] : e === null || e === void 0 ? void 0 : e.key;
             if (listener != 'keypress' && this.meta_keys.indexOf('key') >= 0)
                 key = null;
@@ -65,7 +66,7 @@ export class KeyBinder {
             // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
             if ((e === null || e === void 0 ? void 0 : e.key.trim().length) == 0)
                 key = 'space';
-            // //console.log(key)
+            console.log(e.code, listener);
             key ? this.current_stroke.push(key) : null;
             this.last_combination = this.current_stroke.join('+');
             this.timer_lsitner = this.setTimeout(this.timer - 10);
@@ -103,8 +104,11 @@ export class KeyBinder {
         return this;
     }
     sortCombinations() {
+        console.log(this.listen_to);
         const any_key_combination = this.listen_to.filter(value => (value === null || value === void 0 ? void 0 : value.combination) === '***')[0];
         this.listen_to = this.listen_to.filter(value => (value === null || value === void 0 ? void 0 : value.combination) !== '***').sort();
+        //remove duplicate combinations
+        this.listen_to = this.listen_to.filter((value, index, self) => self.findIndex(v => v.combination === value.combination) === index);
         if (any_key_combination)
             this.listen_to.push(any_key_combination);
         return this;
@@ -116,6 +120,7 @@ export class KeyBinder {
         //console.log(this.listen_to)
         this.sortCombinations();
         //console.log(this.listen_to)
+        console.log(this.last_combination, this.current_stroke);
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase();
         let combination_data = this.listen_to.filter((data) => {
             const key = this.settings.case_sensitive ? data.combination : data.combination.toLowerCase();

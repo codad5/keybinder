@@ -1,4 +1,11 @@
-import {KeyBinder} from '../src/index'
+/**
+ * @jest-environment jsdom
+ */
+import {jest} from '@jest/globals';
+
+jest.useFakeTimers();
+import KeyBinder from '../src/index'
+
 
 const keyController = new KeyBinder({
     listener_type: 'keydown',
