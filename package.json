@@ -1,6 +1,6 @@
 {
   "name": "domkeybinder",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "This helps to manage key biniding command ",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -30,10 +30,10 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "watch:ts": "tsc  -p ./ --outDir ./out -w --pretty",
-    "build": "npm run build:ts && npm run rollup",
-    "build:dev": "npm run test && npm run build:ts && npm run rollup",
+    "build": "npm run build:ts && npm run build:cjs && npm run rollup",
+    "build:dev": "npm run test && npm run build:ts && npm run build:cjs && npm run rollup",
     "build:ts": "tsc",
-    "build:cjs": "tsc --outDir dist/cjs",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
     "babel": "babel cdn -d lib",

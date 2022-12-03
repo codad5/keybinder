@@ -1,5 +1,5 @@
 export default {
-    input: 'dist/cjs/index.js',  
+    input: 'dist/esm/index.js',  
     output: {
         file: 'lib/keybinder.js',
         format: 'iife' ,
