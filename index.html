@@ -1,5 +1,5 @@
-<!-- <script src="https://codad5.github.io/keybinder/lib/keybinder.js"></script> -->
-<script src="lib/keybinder.js"></script>
+<script src="https://codad5.github.io/keybinder/lib/keybinder.js"></script>
+<script src="lib/keybinder.beta.js"></script>
 <h1>Key Binder</h1>
 <div id="bcdiv"><strong>Press B+G: </strong></div>
 <div id="scdiv"><strong>Press Shift+C: </strong></div>
@@ -16,7 +16,7 @@
 <script defer>
     var stopped = false
     const keyController = new KeyBinder({
-    default_listener: 'keydown',
+    default_listener: 'keypress',
     element: window,
     // case_sensitive:true
     })
