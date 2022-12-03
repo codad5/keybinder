@@ -1,5 +1,5 @@
 # This is a name of the workflow
-name: build
+name: Testing Pull Request
 # Controls when the workflow will run
 on:
   push:
