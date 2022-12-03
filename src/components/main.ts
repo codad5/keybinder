@@ -8,8 +8,9 @@ export class KeyBinder {
         element: window,
         case_sensitive:false,
         allow_default:false,
+        strict : false
     }
-    private readonly meta_keys = ['Control', 'Shift', 'Alt', 'Meta'].map(v => v.toLowerCase());
+    private readonly meta_keys = ['Control', 'Shift', 'Alt', 'Meta', 'ctrl'].map(v => v.toLowerCase());
     private readonly can_shift = 'abcdefghijklmnopqrstuvwxyz1234567890'
     private last_combination :string = ''
     private timer_lsitner ?: NodeJS.Timeout
@@ -20,7 +21,7 @@ export class KeyBinder {
     private listen_to : KeyCombination[] = []
     private backup_listener : KeyCombination[] = []
     constructor(settings ?: Keybinder_setting){
-        this.settings = {...this.settings, ...settings}
+        this.settings = {...this.settings, ...settings, listener_type: settings?.default_listener ?? this.settings.listener_type}
         this.startListening()
     }
     /**
@@ -46,6 +47,7 @@ export class KeyBinder {
     }
     private listenerCallback(e : Event){
             //check if e is type of KeyboardEvent
+            console.log(this.settings)
             const listener = e.type ?? this.settings.listener_type
             if(!(e instanceof KeyboardEvent)) return
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
@@ -54,7 +56,7 @@ export class KeyBinder {
                 e.preventDefault()
                 e.stopPropagation();
             }
-            let can_shift = this.can_shift+this.can_shift.toUpperCase()
+            let alphanumeric = this.can_shift+this.can_shift.toUpperCase()
             let key : string|null = e?.key
             // //// console.log(key)
             // console.log(e.key)
@@ -66,15 +68,20 @@ export class KeyBinder {
             e?.ctrlKey && this.current_stroke.indexOf('ctrl') < 0 ? this.current_stroke.push('ctrl') : null
             e?.altKey && this.current_stroke.indexOf('alt') < 0  ? this.current_stroke.push('alt') : null
             e?.metaKey && this.current_stroke.indexOf('meta') < 0  ? this.current_stroke.push('meta') : null
-            e?.shiftKey && this.current_stroke.indexOf('shift') < 0 && can_shift.indexOf(`${e?.key}`) >= 0 && `${e?.key}`.length == 1 ? this.current_stroke.push('shift') : null
+            e?.shiftKey && this.current_stroke.indexOf('shift') < 0 && alphanumeric.indexOf(`${e?.key}`) >= 0 && `${e?.key}`.length == 1 ? this.current_stroke.push('shift') : null
             if(listener == 'keypress' && e.code.toLowerCase() !== 'enter')  key = `${e?.key}`.length > 1 ? e?.code[e?.code.length - 1] : e?.key
-            if(listener != 'keypress' && this.meta_keys.indexOf('key') >= 0)key = null
+            if(listener != 'keypress' && this.meta_keys.indexOf(`${key}`) >= 0) key = null
             // //// console.log(key)
             if(`${key}`.length > 1) key = `${key}`.toLowerCase()
             // if(['Control', 'Shift', 'Alt'].indexOf(key) > 0)key = null
             if(e?.key.trim().length == 0) key = 'space'
             // console.log(e.code, listener)
             key ? this.current_stroke.push(key) : null
+            //removing the shift key if the key is not part of the alphanumeric characters and character lenght is one
+            if(alphanumeric.indexOf(`${e?.key}`) < 0 && this.current_stroke.filter(v => alphanumeric.indexOf(`${v}`) < 0 && this.meta_keys.indexOf(`${key}`) < 0).length > 1){
+                this.current_stroke = this.current_stroke.filter(v => v.toLowerCase() != 'shift')
+            }
+            this.current_stroke = this.current_stroke.map(v => v == 'control' ? 'ctrl' : v).filter((value, index, self) => this.meta_keys.indexOf(`${value.toLowerCase()}`) >= 0 ? self.findIndex(v => v === value) === index : value)
             this.last_combination = this.current_stroke.join('+')
             this.timer_lsitner = this.setTimeout(this.timer - 10)
             this.just_listened = true
@@ -115,7 +122,7 @@ export class KeyBinder {
             if(value.split('+').length == 1 && value.split('+')[0].length > 1)value = value.toLowerCase()
             //// console.log(`added ${value.trim()} to key_listener`)
             this.listen_to.push({
-                combination:value.trim(),
+                combination:value.split('+').map((v: string) => v == 'control' ? 'ctrl' : v).join('+').trim(),
                 callback: (data = null) => callback(data)
             })
         })

@@ -18,28 +18,52 @@ it('keybinder should be defined', () => {
     expect(KeyBinder).toBeDefined()
 })
 
-const ListenToKey = (key : string, ...data : any[]) => keyController.ListenToKey(key, ...data)
+const ListenToKey = (key : string, ...data : any[]) => keyController.ListenToKey(key, ...data);
+var keycom : string[] = []
 
-ListenToKey('q+p', () => {
-    console.log('hello')
-})
+const addListener = (...key: string[]) => {
+    
+    return keycom = [...keycom, ...key].map((v: string) => {
+        ListenToKey(v, () => {
+            console.log('hello')
+        })
+        return v
+    }).filter((value, index, self) => self.findIndex(v => v === value) === index)
+}
 
-ListenToKey('ctrl+p', () => {
-    console.log('hello')
-})
+keycom = addListener('q+p','ctrl+p','ctrl+p','control+z')
+// ListenToKey('q+p', () => {
+//     console.log('hello')
+// })
 
-ListenToKey('ctrl+p', () => {
-    console.log('hello')
-})
+// ListenToKey('ctrl+p', () => {
+//     console.log('hello')
+// })
+
+// ListenToKey('ctrl+p', () => {
+//     console.log('hello')
+// })
+// ListenToKey('control+z', () => {
+//     console.log('hello')
+// })
 
 // test to check number of listeners
-it('should have 2 listeners', () => {
-    expect(keyController.getCombinations().length).toBe(2)
+test('Key combination array should not have duplicate', () => {
+    expect(keycom.length).toBe(3)
 })
+it('should have 2 listeners', () => {
+    expect(keyController.getCombinations().length).toBe(keycom.length)
+})
+
 
 //duplicate should be removed
 test(`no duplicate should be found`, () => {
-    expect(keyController.getCombinations().length).not.toBe(3)
+    expect(keyController.getCombinations().length).not.toBeGreaterThan(keycom.length)
+})
+
+test('Control is converted to ctrl', () => {
+    expect(keyController.getCombinationWith('ctrl+z')).not.toBeNull()
+    expect(keyController.getCombinationWith('ctrl+z')).toBeDefined()
 })
 
 test('Getting a particular combination', () => {
@@ -48,7 +72,7 @@ test('Getting a particular combination', () => {
 })
 
 test('Will return general combination (***) if set', () => {
-    ListenToKey('***', () => {console.log('hello')})
+    addListener('***')
     expect(keyController.getCombinationWith('p+q+z').combination).toBe('***')
 })
 
@@ -63,7 +87,8 @@ test(`Clear Method is working `, () => {
 
 test('restore method is working' , () => {
     keyController.restore()
-    expect(keyController.getCombinations().length).toBe(3)
+    console.log(keyController.getCombinations())
+    expect(keyController.getCombinations().length).toBe(keycom.length)
 })
 
 test('setting property has all default props', () => {

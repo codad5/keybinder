@@ -1,4 +1,4 @@
-<script src="https://codad5.github.io/keybinder/lib/keybinder.js"></script>
+<!-- <script src="https://codad5.github.io/keybinder/lib/keybinder.js"></script> -->
 <script src="lib/keybinder.js"></script>
 <h1>Key Binder</h1>
 <div id="bcdiv"><strong>Press B+G: </strong></div>
@@ -6,7 +6,7 @@
 <div id="spacediv"><strong>Press the SpaceBar: </strong></div>
 <button type="button" class="stopStart">Stop</button>
 <p>
-    <h2>Your current key combination (Use Alt+c to clear) </h2>
+    <h2>To know your key Name Press the key and see combination below!</h2>
     <ol id="keystrokehistory">
 
     </ol>
@@ -16,7 +16,7 @@
 <script defer>
     var stopped = false
     const keyController = new KeyBinder({
-    default_listener: 'keyup',
+    default_listener: 'keydown',
     element: window,
     // case_sensitive:true
     })
@@ -46,33 +46,35 @@
         if(stopped) return document.querySelector('.stopStart').innerHTML = 'start'
         document.querySelector('.stopStart').innerHTML = 'stop'
     })
-    ListenToKey('enter','j+j', 'v', (data) => {
+    ListenToKey('shift+enter','j+j', 'shift+v', (data) => {
         console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         console.table({...data, element: 'Window'})
         confirm('Do you need more information?')
     })
-    ListenToKey('space', (data) => {
-        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+    ListenToKey('shift+space', 'space', (data) => {
+        // console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         document.querySelector('#spacediv').innerHTML += 'la'
+        document.querySelector('#keystrokehistory').innerHTML += `<li>Your  combination is ${data.combination} </li>`
     })
     ListenToKey('shift+s', (data) => {
         console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
     })
-    ListenToKey('meta', (data) => {
-        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+    ListenToKey('shift+meta', (data) => {
+        // console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         if(alert('Dont press the windows key again')) return
     })
     ListenToKey('ctrl+b', (data) => {
-        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        // console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         confirm('bold combination')
     })
     ListenToKey('arrowup', (data) => {
-        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        // console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        document.querySelector('#keystrokehistory').innerHTML += `<li>Your  combination is ${data.combination} </li>`
         if(confirm('arrowup combination')) window.clientInformation.wakeLock.request()
     })
     
     ListenToKey('***', (data) => {
-        console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
+        // console.log('%cThanks for using this by https://github.com/codad5 && https://github.com/ptbysr', 'background:blue;color:white;width:100%;height:50px;font-size:20px;')
         document.querySelector('#keystrokehistory').innerHTML += `<li>Your  combination is ${data.combination} </li>`
         console.table({...data, element:'Window'})
     })
