@@ -1,8 +1,9 @@
+import { threadId } from 'worker_threads';
 import { Keybinder_setting, key_listener as key_listener, KeyCombination} from './types'
 
 export class KeyBinder {
     
-        settings : Keybinder_setting = {
+    settings : Keybinder_setting = {
         listener_type: 'keypress',
         element: window,
         case_sensitive:false,
@@ -41,11 +42,15 @@ export class KeyBinder {
     private listener(listener: key_listener = 'keypress', element: Element|Window|undefined|null){
         if(!element) throw new Error(`Error in event element ( ${this.settings.element} )`)
         // set type of listener to keyboard event
-        element?.addEventListener(listener, (e) => {
+        return element?.addEventListener(listener, e => this.listenerCallback(e))
+    }
+    private listenerCallback(e : Event){
             //check if e is type of KeyboardEvent
+            const listener = e.type ?? this.settings.listener_type
             if(!(e instanceof KeyboardEvent)) return
             // let can_shift = !this.settings.case_sensitive ? this.can_shift+this.can_shift.toUpperCase() : this.can_shift
-            if(this.settings.allow_default){
+            //console.log(this.settings)
+            if(!this.settings?.allow_default){
                 e.preventDefault()
                 e.stopPropagation();
             }
@@ -74,14 +79,27 @@ export class KeyBinder {
             this.timer_lsitner = this.setTimeout(this.timer - 10)
             this.just_listened = true
             // //// console.log(this.current_stroke, can_shift.indexOf(e?.key))
-        })
-    }
+        }
     /**
      * This is the function that starts listening to the key combination
      * 
      */
     private startListening(){
         this.main_listener = this.listener(this.settings.listener_type, this.settings.element)
+        return this
+    }
+    /**
+     * this function is remove the listener from that element 
+     * @param clear This state if all previous combination should be cleared if true or left
+     * @returns {this}
+     */
+    stopListening(clear : boolean  = true): this{
+        this.settings.element?.removeEventListener(this.settings.listener_type ?? 'keyup', e => this.listenerCallback(e))
+        return clear ? this.clear() : this
+    }
+    continue(restore : boolean = false){
+        this.stopListening().startListening()
+        return restore ? this.restore() : this
     }
     /**
      * This is the function that assemble all the key combination to be listened to by the
@@ -104,7 +122,7 @@ export class KeyBinder {
         return this.sortCombinations()
     }
     sortCombinations(){
-        console.log(this.listen_to)
+        // console.log(this.listen_to)
         const any_key_combination = this.listen_to.filter(value => value?.combination === '***')[0]
         this.listen_to = this.listen_to.filter(value => value?.combination !== '***').sort()
         //remove duplicate combinations
@@ -116,28 +134,28 @@ export class KeyBinder {
      * This is the functioned called after the combination is made
      */
     handleKey(){
-        //console.log(this.listen_to)
         this.sortCombinations()
-        //// console.log(this.listen_to)
-        // console.log(this.last_combination, this.current_stroke)
         let key_combination = this.settings.case_sensitive ? this.current_stroke.join('+') : this.current_stroke.join('+').toLowerCase()
-        let combination_data = this.listen_to.filter((data) => {
+        let {callback, combination} = this.getCombinationWith(key_combination),
+        settings = {combination, ...this.settings}
+        if(combination === '***') settings = {...settings, combination:this.last_combination}
+        
+        if(combination) callback({...settings})
+    }
+    getCombinationWith(key_combination: string){
+        return this.listen_to.filter((data) => {
             const key = this.settings.case_sensitive ? data.combination: data.combination.toLowerCase()
             return key === key_combination || key === "***"
-        })[0],
-        settings = {...combination_data, ...this.settings}
-        if(combination_data?.combination === '***') settings = {...settings, combination:this.last_combination}
-        
-        if(combination_data) combination_data?.callback({...settings})
+        })[0]
     }
     /**
      * Get all the key combinations that are being listened to
      * 
-     * @returns {Array} an array of all the key combinations
+     * @returns {KeyCombination[]} an array of all the key combinations
      * 
      */
-    getCombinations(){
-        return this.listen_to
+    getCombinations(): KeyCombination[]{
+        return this.sortCombinations().listen_to
     }
     
     /**
@@ -156,6 +174,10 @@ export class KeyBinder {
     restore(): this{
         this.listen_to = this.backup_listener
         return this
+    }
+    set(settings ?: Keybinder_setting){
+        this.stopListening(false).settings = {...this.settings, ...settings}
+        return this.startListening()
     }
 
 

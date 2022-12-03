@@ -1,5 +1,5 @@
 export  type Keybinder_setting = {
-    listener_type : key_listener,
+    listener_type? : key_listener,
     element ?: Element|Window ,
     case_sensitive ?: boolean,
     allow_default ?: boolean,
