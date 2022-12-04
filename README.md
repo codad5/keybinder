@@ -1,6 +1,6 @@
 # Key Bonder/Binder
 
-This is a javascript library (both vallina and frameworks) for frontend that helps with keyboard binding .
+This is a javascript library for frontend development (both vallina and frameworks) that helps with keyboard binding / combinations .
 
 This currently supports most keys in `windows OS` you can visit the [Home page](https://codad5.github.io/keybinder/) to check the key code for your machine
 
