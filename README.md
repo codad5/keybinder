@@ -1,5 +1,7 @@
 # Key Bonder/Binder
 
+[![Watch the video](https://img.youtube.com/vi/lfLIXIBuCJs/hqdefault.jpg)](https://youtu.be/lfLIXIBuCJs)
+
 This is a javascript library for frontend development (both vallina and frameworks) that helps with keyboard binding / combinations .
 
 This currently supports most keys in `windows OS` you can visit the [Home page](https://codad5.github.io/keybinder/) to check the key code for your machine
